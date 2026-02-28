@@ -1,0 +1,196 @@
+diff --git a/node_modules/pdq-wasm/dist/esm/pdq.js b/node_modules/pdq-wasm/dist/esm/pdq.js
+index 4b9afa7..cb1335c 100644
+--- a/node_modules/pdq-wasm/dist/esm/pdq.js
++++ b/node_modules/pdq-wasm/dist/esm/pdq.js
+@@ -36,9 +36,9 @@ function isWorkerEnvironment() {
+         // Don't require importScripts - ES module workers don't have it
+         // Check for worker global scope types or absence of window
+         (
+-        // Check for any worker global scope type
+-        // @ts-ignore - WorkerGlobalScope types only available in workers
+-        typeof WorkerGlobalScope !== 'undefined' ||
++            // Check for any worker global scope type
++            // @ts-ignore - WorkerGlobalScope types only available in workers
++            typeof WorkerGlobalScope !== 'undefined' ||
+             // @ts-ignore - DedicatedWorkerGlobalScope only in dedicated workers
+             typeof DedicatedWorkerGlobalScope !== 'undefined' ||
+             // @ts-ignore - SharedWorkerGlobalScope only in shared workers
+@@ -156,7 +156,7 @@ export class PDQ {
+                 if (!options.wasmUrl) {
+                     // Use unpkg.com CDN - pins to current package version for stability
+                     // Users can also use @latest or a different CDN (jsDelivr, etc.)
+-                    const { version } = require('../package.json');
++                    const version = '0.3.9';
+                     options.wasmUrl = `https://unpkg.com/pdq-wasm@${version}/wasm/pdq.wasm`;
+                     this.log(`No wasmUrl provided, using CDN: ${options.wasmUrl}`);
+                     this.log('For production, consider self-hosting the WASM files for better reliability');
+@@ -219,10 +219,11 @@ export class PDQ {
+                     throw new Error(errorMsg);
+                 }
+                 // In Node.js, read WASM file and provide as binary to avoid URL issues
+-                const path = require('path');
+-                const fs = require('fs');
+-                const wasmPath = path.join(__dirname, '..', 'wasm', 'pdq.wasm');
+-                const wasmBinary = fs.readFileSync(wasmPath);
++                // Suppress fs/path require for Turbopack
++                const path = typeof window === 'undefined' ? eval('require')('path') : null;
++                const fs = typeof window === 'undefined' ? eval('require')('fs') : null;
++                const wasmPath = path ? path.join(__dirname, '..', 'wasm', 'pdq.wasm') : '';
++                const wasmBinary = fs ? fs.readFileSync(wasmPath) : null;
+                 this.module = await factory({
+                     ...options,
+                     wasmBinary: wasmBinary
+@@ -588,24 +589,24 @@ export class PDQ {
+         // Calculate distance and similarity for each hash
+         const matches = hashes
+             .map((hash, index) => {
+-            if (hash.length !== expectedLength) {
+-                const errorMsg = `Invalid hash length at index ${index}. Expected ${expectedLength} bytes, got ${hash.length}`;
+-                this.handleError(errorMsg);
+-                if (this.ignoreInvalidFlag)
+-                    return null; // Skip invalid hash
+-            }
+-            const distance = this.hammingDistance(referenceHash, hash);
+-            const similarity = this.similarity(referenceHash, hash);
+-            const match = {
+-                hash,
+-                distance,
+-                similarity,
+-            };
+-            if (includeIndex) {
+-                match.index = index;
+-            }
+-            return match;
+-        })
++                if (hash.length !== expectedLength) {
++                    const errorMsg = `Invalid hash length at index ${index}. Expected ${expectedLength} bytes, got ${hash.length}`;
++                    this.handleError(errorMsg);
++                    if (this.ignoreInvalidFlag)
++                        return null; // Skip invalid hash
++                }
++                const distance = this.hammingDistance(referenceHash, hash);
++                const similarity = this.similarity(referenceHash, hash);
++                const match = {
++                    hash,
++                    distance,
++                    similarity,
++                };
++                if (includeIndex) {
++                    match.index = index;
++                }
++                return match;
++            })
+             .filter((match) => match !== null);
+         // Sort by distance (ascending - most similar first)
+         // Use secondary sort by original index for stable ordering
+diff --git a/node_modules/pdq-wasm/dist/pdq.js b/node_modules/pdq-wasm/dist/pdq.js
+index a1feead..aac309d 100644
+--- a/node_modules/pdq-wasm/dist/pdq.js
++++ b/node_modules/pdq-wasm/dist/pdq.js
+@@ -5,24 +5,24 @@
+  * Copyright (c) Meta Platforms, Inc. and affiliates (original algorithm)
+  * Copyright (c) 2025 (WebAssembly bindings)
+  */
+-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
++var __createBinding = (this && this.__createBinding) || (Object.create ? (function (o, m, k, k2) {
+     if (k2 === undefined) k2 = k;
+     var desc = Object.getOwnPropertyDescriptor(m, k);
+     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+-      desc = { enumerable: true, get: function() { return m[k]; } };
++        desc = { enumerable: true, get: function () { return m[k]; } };
+     }
+     Object.defineProperty(o, k2, desc);
+-}) : (function(o, m, k, k2) {
++}) : (function (o, m, k, k2) {
+     if (k2 === undefined) k2 = k;
+     o[k2] = m[k];
+ }));
+-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
++var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function (o, v) {
+     Object.defineProperty(o, "default", { enumerable: true, value: v });
+-}) : function(o, v) {
++}) : function (o, v) {
+     o["default"] = v;
+ });
+ var __importStar = (this && this.__importStar) || (function () {
+-    var ownKeys = function(o) {
++    var ownKeys = function (o) {
+         ownKeys = Object.getOwnPropertyNames || function (o) {
+             var ar = [];
+             for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+@@ -72,9 +72,9 @@ function isWorkerEnvironment() {
+         // Don't require importScripts - ES module workers don't have it
+         // Check for worker global scope types or absence of window
+         (
+-        // Check for any worker global scope type
+-        // @ts-ignore - WorkerGlobalScope types only available in workers
+-        typeof WorkerGlobalScope !== 'undefined' ||
++            // Check for any worker global scope type
++            // @ts-ignore - WorkerGlobalScope types only available in workers
++            typeof WorkerGlobalScope !== 'undefined' ||
+             // @ts-ignore - DedicatedWorkerGlobalScope only in dedicated workers
+             typeof DedicatedWorkerGlobalScope !== 'undefined' ||
+             // @ts-ignore - SharedWorkerGlobalScope only in shared workers
+@@ -192,7 +192,7 @@ class PDQ {
+                 if (!options.wasmUrl) {
+                     // Use unpkg.com CDN - pins to current package version for stability
+                     // Users can also use @latest or a different CDN (jsDelivr, etc.)
+-                    const { version } = require('../package.json');
++                    const version = '0.3.9';
+                     options.wasmUrl = `https://unpkg.com/pdq-wasm@${version}/wasm/pdq.wasm`;
+                     this.log(`No wasmUrl provided, using CDN: ${options.wasmUrl}`);
+                     this.log('For production, consider self-hosting the WASM files for better reliability');
+@@ -255,8 +255,8 @@ class PDQ {
+                     throw new Error(errorMsg);
+                 }
+                 // In Node.js, read WASM file and provide as binary to avoid URL issues
+-                const path = require('path');
+-                const fs = require('fs');
++                const path = typeof require !== 'undefined' ? eval('require')('path') : null;
++                const fs = typeof require !== 'undefined' ? eval('require')('fs') : null;
+                 const wasmPath = path.join(__dirname, '..', 'wasm', 'pdq.wasm');
+                 const wasmBinary = fs.readFileSync(wasmPath);
+                 this.module = await factory({
+@@ -624,24 +624,24 @@ class PDQ {
+         // Calculate distance and similarity for each hash
+         const matches = hashes
+             .map((hash, index) => {
+-            if (hash.length !== expectedLength) {
+-                const errorMsg = `Invalid hash length at index ${index}. Expected ${expectedLength} bytes, got ${hash.length}`;
+-                this.handleError(errorMsg);
+-                if (this.ignoreInvalidFlag)
+-                    return null; // Skip invalid hash
+-            }
+-            const distance = this.hammingDistance(referenceHash, hash);
+-            const similarity = this.similarity(referenceHash, hash);
+-            const match = {
+-                hash,
+-                distance,
+-                similarity,
+-            };
+-            if (includeIndex) {
+-                match.index = index;
+-            }
+-            return match;
+-        })
++                if (hash.length !== expectedLength) {
++                    const errorMsg = `Invalid hash length at index ${index}. Expected ${expectedLength} bytes, got ${hash.length}`;
++                    this.handleError(errorMsg);
++                    if (this.ignoreInvalidFlag)
++                        return null; // Skip invalid hash
++                }
++                const distance = this.hammingDistance(referenceHash, hash);
++                const similarity = this.similarity(referenceHash, hash);
++                const match = {
++                    hash,
++                    distance,
++                    similarity,
++                };
++                if (includeIndex) {
++                    match.index = index;
++                }
++                return match;
++            })
+             .filter((match) => match !== null);
+         // Sort by distance (ascending - most similar first)
+         // Use secondary sort by original index for stable ordering
