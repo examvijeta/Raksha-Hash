@@ -1,31 +1,46 @@
 # 🛡️ Raksha Hash
 
-**Raksha Hash** is a privacy-first, decentralized digital protection platform designed to combat Non-Consensual Intimate Imagery (NCII). By leveraging client-side hashing technology, it allows victims to register "digital fingerprints" of their content without ever uploading the actual images to a server, ensuring absolute privacy and legal readiness.
+**Raksha Hash** is a revolutionary, privacy-first digital safeguard designed to empower victims of Non-Consensual Intimate Imagery (NCII). By combining advanced client-side hashing with automated legal assistance, Raksha Hash provides a "Digital Shield" that is both technically robust and legally actionable.
+
+---
+
+## 🌟 Core Purpose & Mission
+
+The digital landscape can often feel unsafe, especially when private content is weaponized. Raksha Hash was built with a single, uncompromising mission: **To give victims their power back.**
+
+### 1. Privacy Without Compromise
+Most reporting tools require you to upload your sensitive images to a third-party server. **Raksha Hash changes that.** Using browser-based WebAssembly, we convert your image into a "Digital Fingerprint" (a 64-char PDQ Hash) directly on your device. The original image *never* leaves your tab.
+
+### 2. Legal Readiness & Enforcement
+Reporting a crime is often as Traumatic as the crime itself. We bridge the gap between "happened" and "reported" by:
+- **Instant FIR Generation:** Automatically creating legally-valid police complaint drafts in Local Hindi and English.
+- **Forensic Proof:** Every registration generates a unique Case ID that acts as a verifiable digital anchor for law enforcement.
+- **Multi-Platform Clearing:** Providing a direct roadmap to report content to Meta, Google, TikTok, and the Government of India (CyberCrime.gov.in).
+
+### 3. Fighting the "Permanent" Nature of the Web
+Our goal is to make NCII content "un-sharable." By registering hashes, we help platforms identify and block re-uploads of protected content, effectively breaking the cycle of viral abuse.
 
 ---
 
 ## 🎯 Project Goals
-- **Privacy First:** Images never leave the user's device. Hashing happens entirely in the browser using WebAssembly.
-- **Legal Empowerment:** Automate the generation of police FIR (First Information Report) drafts with valid digital evidence.
-- **Direct Reporting:** Provide a centralized hub for reporting to major platforms (Meta, Google, NCW, etc.).
-- **Global & Local:** Support for multi-language (Hindi/English) and integration with both global (StopNCII.org) and Indian legal frameworks.
+- **Browser-Only Fingerprinting:** Absolute zero-knowledge architecture.
+- **Empowerment Through Automation:** Reducing the friction of legal filing.
+- **Cross-Border Support:** Supporting both International (StopNCII) and National (NCW/Police) frameworks.
+- **Accessible Design:** A premium, calm, and supportive UI/UX for users in distress.
 
 ---
 
 ## 🏗️ Architecture & Technology Stack
 
 ### Frontend & Framework
-- **Next.js 16 (App Router):** High-performance React framework for the core UI and routing.
+- **Next.js 16 (App Router):** High-performance React framework for core UI.
 - **Tailwind CSS 4:** Modern, utility-first CSS for a premium, responsive design.
-- **WASM (WebAssembly):** Used for heavy computational tasks like image hashing.
+- **WASM (WebAssembly):** Client-side execution of complex hashing algorithms.
 
 ### Core Service Modules
-- **PDQ-WASM:** Implements the PDQ hashing algorithm locally in the browser. Only the 64-character hash is sent to the backend.
-- **Firebase & Supabase:** Hybrid backend for secure data storage, user authentication, and real-time database needs.
-- **jsPDF & html2canvas:** A custom-built engine to generate high-resolution, multi-page PDF FIR drafts.
-
-### Internationalization
-- **Next.js Context API:** Custom localization provider supporting English and Hindi (Universal Hindi/English support).
+- **PDQ-WASM:** Implements the Photo-Perceptual hashing (PDQ) locally.
+- **Firebase & Supabase:** Hybrid secure storage for hashes, Case IDs, and user metadata.
+- **jsPDF & html2canvas:** Advanced PDF engine designed for multi-page, high-res legal document generation.
 
 ---
 
@@ -54,16 +69,16 @@ raksha-hash/
 ## 🚀 Key Features
 
 ### 1. Zero-Knowledge Protection
-Users "protect" an image by generating its **PDQ Hash**. This hash is a unique digital fingerprint. Raksha Hash stores only this signature, making it impossible for the platform to see the original content, yet providing the user with a "Case ID" to prove original ownership.
+Users "protect" an image by generating its **PDQ Hash**. This hash is a unique digital fingerprint. Raksha Hash stores only this signature, making it impossible for the platform to see the original content.
 
 ### 2. Smart FIR Generator
-Located in `/legal`, this tool allows victims to fill out a simple form and generate a professional FIR draft.
+Located in `/legal`, this tool generates a professional FIR draft.
 - **Multi-page PDF:** Automatically partitions long descriptions into multiple A4 pages.
 - **Dual Language:** Switch between Hindi and English templates instantly.
 - **Digital Evidence:** Automatically embeds the Raksha Hash Case ID as forensic proof.
 
 ### 3. Verification Engine
-The `/verify` module allows users to re-hash an image and check if it matches a pre-existing registration. This is crucial for verifying if leaked content matches what was previously protected.
+The `/verify` module allows users to re-hash an image and check if it matches a pre-existing registration.
 
 ---
 
@@ -82,9 +97,7 @@ The `/verify` module allows users to re-hash an image and check if it matches a 
    ```bash
    npm install
    ```
-3. Set up environment variables:
-   Create a `.env.local` file with your credentials (Firebase/Supabase/Resend).
-
+3. Set up environment variables in `.env.local`.
 4. Run the development server:
    ```bash
    npm run dev
@@ -93,11 +106,8 @@ The `/verify` module allows users to re-hash an image and check if it matches a 
 ---
 
 ## ⚖️ Legal Disclaimer
-Raksha Hash is a tool to assist in the documentation and reporting of NCII. It is not a law firm and does not provide legal advice. Users are encouraged to contact local law enforcement or a legal professional for specific legal actions.
+Raksha Hash is a tool to assist in the documentation and reporting of NCII. IT IS NOT A LAW FIRM. Always consult with legal professionals or law enforcement for official processes.
 
 ---
-
-## 🤝 Contributing
-We welcome contributions that improve the security, accessibility, and utility of Raksha Hash. Please submit a PR or open an issue for major changes.
 
 **Protect your privacy. Reclaim your digital space.**
