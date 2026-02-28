@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🛡️ Raksha Hash
 
-## Getting Started
+**Raksha Hash** is a privacy-first, decentralized digital protection platform designed to combat Non-Consensual Intimate Imagery (NCII). By leveraging client-side hashing technology, it allows victims to register "digital fingerprints" of their content without ever uploading the actual images to a server, ensuring absolute privacy and legal readiness.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🎯 Project Goals
+- **Privacy First:** Images never leave the user's device. Hashing happens entirely in the browser using WebAssembly.
+- **Legal Empowerment:** Automate the generation of police FIR (First Information Report) drafts with valid digital evidence.
+- **Direct Reporting:** Provide a centralized hub for reporting to major platforms (Meta, Google, NCW, etc.).
+- **Global & Local:** Support for multi-language (Hindi/English) and integration with both global (StopNCII.org) and Indian legal frameworks.
+
+---
+
+## 🏗️ Architecture & Technology Stack
+
+### Frontend & Framework
+- **Next.js 16 (App Router):** High-performance React framework for the core UI and routing.
+- **Tailwind CSS 4:** Modern, utility-first CSS for a premium, responsive design.
+- **WASM (WebAssembly):** Used for heavy computational tasks like image hashing.
+
+### Core Service Modules
+- **PDQ-WASM:** Implements the PDQ hashing algorithm locally in the browser. Only the 64-character hash is sent to the backend.
+- **Firebase & Supabase:** Hybrid backend for secure data storage, user authentication, and real-time database needs.
+- **jsPDF & html2canvas:** A custom-built engine to generate high-resolution, multi-page PDF FIR drafts.
+
+### Internationalization
+- **Next.js Context API:** Custom localization provider supporting English and Hindi (Universal Hindi/English support).
+
+---
+
+## 📂 Project Structure
+
+```text
+raksha-hash/
+├── app/                  # Next.js App Router (Pages, API, Layouts)
+│   ├── api/              # Backend API routes (Auth, Database)
+│   ├── dashboard/        # User protected dashboard
+│   ├── legal/            # FIR Generator & Legal Guide
+│   ├── protect/          # Core Hashing/Registration logic
+│   ├── saheli/           # AI Assistance / Support
+│   └── verify/           # Hash verification & audit tools
+├── components/           # Reusable UI components (Navbar, Buttons, Forms)
+├── context/              # Global state (Language/Auth context)
+├── locales/              # JSON translation files (EN/HI)
+├── lib/                  # Shared library configurations (Supabase/Firebase)
+├── public/               # Static assets (Images, Icons, WASM binaries)
+├── supabase/             # Database migrations and seed files
+└── utils/                # Helper functions and formatting tools
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🚀 Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Zero-Knowledge Protection
+Users "protect" an image by generating its **PDQ Hash**. This hash is a unique digital fingerprint. Raksha Hash stores only this signature, making it impossible for the platform to see the original content, yet providing the user with a "Case ID" to prove original ownership.
 
-## Learn More
+### 2. Smart FIR Generator
+Located in `/legal`, this tool allows victims to fill out a simple form and generate a professional FIR draft.
+- **Multi-page PDF:** Automatically partitions long descriptions into multiple A4 pages.
+- **Dual Language:** Switch between Hindi and English templates instantly.
+- **Digital Evidence:** Automatically embeds the Raksha Hash Case ID as forensic proof.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Verification Engine
+The `/verify` module allows users to re-hash an image and check if it matches a pre-existing registration. This is crucial for verifying if leaked content matches what was previously protected.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Getting Started
 
-## Deploy on Vercel
+### Prerequisites
+- Node.js 18+ 
+- NPM or Yarn
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/examvijeta/Raksha-Hash.git
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+   Create a `.env.local` file with your credentials (Firebase/Supabase/Resend).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## ⚖️ Legal Disclaimer
+Raksha Hash is a tool to assist in the documentation and reporting of NCII. It is not a law firm and does not provide legal advice. Users are encouraged to contact local law enforcement or a legal professional for specific legal actions.
+
+---
+
+## 🤝 Contributing
+We welcome contributions that improve the security, accessibility, and utility of Raksha Hash. Please submit a PR or open an issue for major changes.
+
+**Protect your privacy. Reclaim your digital space.**
